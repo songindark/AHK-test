@@ -1,0 +1,43 @@
+SetKeyDelay, 50
+; 默认50
+#IfWinActive ahk_exe NOTEPAD.exe
+#SingleInstance force
+; 跳过对话框并自动替换旧实例, 效果类似于 Reload 命令.
+#NoEnv 
+#Persistent
+; 定义全局变量v_switch
+global v_switch := 1
+; MyNumber := 123
+; 使用~仍然生效
+~a::
+    send 1
+Return
+; 使用$防止套娃
+$w::
+    send 24
+    send {RButton}
+Return
+; 定义函数
+buttom1:
+    send 3
+Return
+; 定义开关
+s::
+d::
+    if v_switch = 1
+    {
+        SetTimer,buttom1,100
+    }
+Return
+; F5停止
+F5::
+    SetTimer,buttom1,Off
+    ; 回车暂停
+Return
+~enter::
+~m::
+; 双暂停开关
+    v_switch := 1-v_switch
+    SetTimer,buttom1,Off
+Return
+#p::Pause  ; Win+P暂停
