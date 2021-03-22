@@ -12,12 +12,12 @@ k::Space
 h::MButton
 c::LShift
 f::d
-*#f::a
+^f::a
 ~a::
     v_direction=0
     send {LControl down}
 Return
 ~d::
     v_direction=1
-    send {LControl up}}
+    send {LControl up}
 Return
