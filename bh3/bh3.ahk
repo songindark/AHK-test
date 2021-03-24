@@ -1,4 +1,4 @@
-SetKeyDelay, 100
+﻿SetKeyDelay, 100
 ; 默认50
 #IfWinActive ahk_exe BH3.exe
 #SingleInstance force
