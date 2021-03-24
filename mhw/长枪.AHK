@@ -1,4 +1,4 @@
-﻿SetKeyDelay, 50
+SetKeyDelay, 50
 ; 默认50
 #IfWinActive ahk_exe MonsterHunterWorld.exe
 #SingleInstance force

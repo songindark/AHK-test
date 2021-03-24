@@ -1,4 +1,4 @@
-﻿; 按住W，就CTRL+左键
+; 按住W，就CTRL+左键
 W::
 Send, {LControl Down}
 Loop

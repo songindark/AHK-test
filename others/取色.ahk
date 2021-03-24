@@ -1,4 +1,4 @@
-﻿#IfWinActive ahk_exe code.exe
+#IfWinActive ahk_exe code.exe
 ; 用window spy 查 ahk_exe对应Code.exe
 #SingleInstance force
 #NoEnv 
