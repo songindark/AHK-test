@@ -1,5 +1,6 @@
-#IfWinActive ahk_exe code.exe
-; ÓÃwindow spy ²é ahk_exe¶ÔÓ¦Code.exe
+ï»¿#IfWinActive ahk_exe code.exe
+; ç”¨window spy æŸ¥ ahk_exeå¯¹åº”Code.exe
+FileEncoding, UTF-8-RAW
 #SingleInstance force
 #NoEnv 
 #Warn 
@@ -11,10 +12,10 @@ Loop
     PixelGetColor currentColor, xpos, ypos
     ToolTip,(%xpos%`,%ypos%)-%currentColor%
     if GetKeyState("capslock", "t")
-    ;  »ñÈ¡µÄÖµÎª 1(true) ±íÃ÷°´¼üÊÇ "on"(´ò¿ªµÄ), ¶ø 0(false) ±íÃ÷ËüÊÇ "off"(¹Ø±ÕµÄ).
+    ;  è·å–çš„å€¼ä¸º 1(true) è¡¨æ˜æŒ‰é”®æ˜¯ "on"(æ‰“å¼€çš„), è€Œ 0(false) è¡¨æ˜å®ƒæ˜¯ "off"(å…³é—­çš„).
         break
 }
-Ctext := "×ø±êÎª" . xpos . "," . ypos . "`rÑÕÉ«Îª" . currentColor
+Ctext := "åæ ‡ä¸º" . xpos . "," . ypos . "`ré¢œè‰²ä¸º" . currentColor
     MsgBox %Ctext%
-clipboard := ""  ;ÈÃ¼ôÌù°å³õÊ¼Îª¿Õ, ÕâÑù¿ÉÒÔÊ¹ÓÃ ClipWait ¼ì²âÎÄ±¾Ê²Ã´Ê±ºò±»¸´ÖÆµ½¼ôÌù°åÖĞ.
+clipboard := ""  ;è®©å‰ªè´´æ¿åˆå§‹ä¸ºç©º, è¿™æ ·å¯ä»¥ä½¿ç”¨ ClipWait æ£€æµ‹æ–‡æœ¬ä»€ä¹ˆæ—¶å€™è¢«å¤åˆ¶åˆ°å‰ªè´´æ¿ä¸­.
 clipboard := Ctext
