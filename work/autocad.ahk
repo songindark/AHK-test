@@ -1,4 +1,4 @@
-;#IfWinActive ahk_exe code.exe
+#IfWinActive ahk_exe acad.exe
 #SingleInstance force
 #NoEnv 
 #Warn 
@@ -7,7 +7,14 @@
 ; PostMessage, 0x50, 0, 0x8040804, , A 
 ; 切换为英文0x4090409=67699721
 PostMessage, 0x50, 0, 0x4090409, , A 
-:*:sc::scale
+:*:sc::
+ControlSend,,scale,ahk_exe acad.exe
+return
 
+:*:bo::
+ControlSend,,boundary,ahk_exe acad.exe
+return
 
-:*:br::boundary
+:*:dr::
+ControlSend,,draworder,ahk_exe acad.exe
+return
