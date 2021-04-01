@@ -5,7 +5,7 @@
 ; #Warn
 #Persistent
 PostMessage, 0x50, 0, 0x4090409, , A 
-filepath:="C:\2.xls"
+filepath:="C:\1.xls"
 xls:=Check(filepath,excel) ;检测是否打开了xlsx文件
 
 if (xls="") ;
@@ -41,16 +41,16 @@ if (R="0")
     ; else
     ;     RunWait R
 }
-arr :=xls.sheets(1).Range["b1:c" r].value
+arr :=xls.sheets(1).Range["a1:c" r].value
 ;~ MsgBox % arr.MaxIndex(1) ; total rows
 ;~ MsgBox % arr.MaxIndex(2) ; total columns
 ; 创建图形界面
-Gui, Add, ListView,r33 w180 gMyListView,B|C
+Gui, Add, ListView,r33 w180 gMyListView,N|X|Y
 GuiControl, -Redraw, MyListView
 Loop, % arr.MaxIndex(1)
 {
     i:=A_Index
-    LV_Add("", arr[i,1],arr[i,2])
+    LV_Add("", arr[i,1],arr[i,2],arr[i,3])
 }
 LV_ModifyCol() ; 根据内容自动调整每列的大小.
 Gui, Show , Center AutoSize, list
@@ -59,14 +59,20 @@ GuiControl, +Redraw, MyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
 MyListView:
     if A_GuiEvent = DoubleClick
     {
-        LV_GetText(RowText, A_EventInfo,2) ; 从行的第2个字段中获取文本.
+        ; LV_GetText(RowText1, A_EventInfo,1) ; 从行的第1个字段中获取文本.
+        ; LV_GetText(RowText2, A_EventInfo,2) ; 从行的第2个字段中获取文本.
+        ; LV_GetText(RowText3, A_EventInfo,3) ; 从行的第1个字段中获取文本.
         ; ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
         ;自己重定义了一个
-
-        RowText:= arr[A_EventInfo,2]
+        ; RowText:= ""
+        ; RowText:= arr[A_EventInfo,2]
         ; 内容
         ; ControlSend,,%RowText%,ahk_exe eps.exe
-        clipboard := RowText
+        RowText1:= arr[A_EventInfo,1]
+        RowText2:= arr[A_EventInfo,2]
+        RowText3:= arr[A_EventInfo,3]
+        Length := StrLen(RowText1)
+        RowText1 := SubStr(RowText1, 1, Length-2)
     }
 Return
 
@@ -94,6 +100,24 @@ return true ; true = 1
 
 IfWinActive, ahk_exe eps.exe
 {
-    q::^v
-}
+q::
+    clipboard := RowText1
+    send ^v
 Return
+}
+
+IfWinActive, ahk_exe eps.exe
+{
+w::
+    clipboard := RowText2
+    send ^v
+Return
+}
+
+IfWinActive, ahk_exe eps.exe
+{
+e::
+    clipboard := RowText3
+    send ^v
+Return
+}
