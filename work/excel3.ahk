@@ -1,4 +1,4 @@
-; #IfWinActive ahk_exe eps.exe
+; #IfWinActive ahk_exe notepad
 ;两行
 #SingleInstance force
 #NoEnv 
@@ -7,7 +7,6 @@
 PostMessage, 0x50, 0, 0x4090409, , A 
 filepath:="C:\1.xls"
 xls:=Check(filepath,excel) ;检测是否打开了xlsx文件
-
 if (xls="") ;
 {
     InputBox,filepath,请打开相应Excel文件！,请输入xls路径,,300,200,,,,15,%filepath%
@@ -30,8 +29,7 @@ if (xls="") ;
     ; until IsObject(xls)
 }
 xls:=ComObjget(filepath)
-ToolTip
-TrayTip ,,已就绪
+
 R=0
 if (R="0") 
 {
@@ -46,7 +44,7 @@ arr :=xls.sheets(1).Range["a1:c" r].value
 ;~ MsgBox % arr.MaxIndex(2) ; total columns
 ; 创建图形界面
 Gui, Add, ListView,r33 w180 gMyListView,N|X|Y
-GuiControl, -Redraw, MyListView
+GuiControl, -Redraw, gMyListView
 Loop, % arr.MaxIndex(1)
 {
     i:=A_Index
@@ -55,24 +53,17 @@ Loop, % arr.MaxIndex(1)
 LV_ModifyCol() ; 根据内容自动调整每列的大小.
 Gui, Show , Center AutoSize, list
 Gui,+AlwaysOnTop
-GuiControl, +Redraw, MyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
+GuiControl, +Redraw, gMyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
 MyListView:
     if A_GuiEvent = DoubleClick
     {
-        ; LV_GetText(RowText1, A_EventInfo,1) ; 从行的第1个字段中获取文本.
-        ; LV_GetText(RowText2, A_EventInfo,2) ; 从行的第2个字段中获取文本.
-        ; LV_GetText(RowText3, A_EventInfo,3) ; 从行的第1个字段中获取文本.
         ; ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
-        ;自己重定义了一个
-        ; RowText:= ""
-        ; RowText:= arr[A_EventInfo,2]
-        ; 内容
-        ; ControlSend,,%RowText%,ahk_exe eps.exe
+        ; ControlSend,,%RowText%,ahk_exe notepad
         RowText1:= arr[A_EventInfo,1]
         RowText2:= arr[A_EventInfo,2]
         RowText3:= arr[A_EventInfo,3]
         Length := StrLen(RowText1)
-        RowText1 := SubStr(RowText1, 1, Length-2)
+        RowText4 := SubStr(RowText1, 1, Length-2)
     }
 Return
 
@@ -91,33 +82,38 @@ Check(filepath,oExcel)
     else
         return ""
 }
-
 GuiClose(GuiHwnd) { ; 这个参数声明是可选的.
     MsgBox 4,, 确定退出吗?
     IfMsgBox No
 return true ; true = 1
 }
-
-IfWinActive, ahk_exe eps.exe
+IfWinActive, ahk_exe notepad
 {
 q::
     clipboard := RowText1
     send ^v
 Return
 }
-
-IfWinActive, ahk_exe eps.exe
+IfWinActive, ahk_exe notepad
 {
 w::
     clipboard := RowText2
     send ^v
 Return
 }
-
-IfWinActive, ahk_exe eps.exe
+IfWinActive, ahk_exe notepad
 {
 e::
     clipboard := RowText3
+    send ^v
+Return
+}
+
+IfWinActive, ahk_exe notepad
+{
+
+r::
+    clipboard := RowText4
     send ^v
 Return
 }
