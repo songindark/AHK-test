@@ -1,5 +1,3 @@
-; #IfWinActive ahk_exe notepad
-;两行
 #SingleInstance force
 #NoEnv 
 ; #Warn
@@ -29,7 +27,6 @@ if (xls="") ;
     ; until IsObject(xls)
 }
 xls:=ComObjget(filepath)
-
 R=0
 if (R="0") 
 {
@@ -43,7 +40,7 @@ arr :=xls.sheets(1).Range["a1:c" r].value
 ;~ MsgBox % arr.MaxIndex(1) ; total rows
 ;~ MsgBox % arr.MaxIndex(2) ; total columns
 ; 创建图形界面
-Gui, Add, ListView,r33 w180 gMyListView,N|X|Y
+Gui, Add, ListView,r50 w300 gMyListView,N|X|Y
 GuiControl, -Redraw, gMyListView
 Loop, % arr.MaxIndex(1)
 {
@@ -51,14 +48,14 @@ Loop, % arr.MaxIndex(1)
     LV_Add("", arr[i,1],arr[i,2],arr[i,3])
 }
 LV_ModifyCol() ; 根据内容自动调整每列的大小.
-Gui, Show , Center AutoSize, list
+Gui, Show ;, Center AutoSize, list
 Gui,+AlwaysOnTop
 GuiControl, +Redraw, gMyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
 MyListView:
     if A_GuiEvent = DoubleClick
     {
         ; ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
-        ; ControlSend,,%RowText%,ahk_exe notepad
+        ; ControlSend,,%RowText%,ahk_exe notepad.exe
         RowText1:= arr[A_EventInfo,1]
         RowText2:= arr[A_EventInfo,2]
         RowText3:= arr[A_EventInfo,3]
@@ -66,7 +63,6 @@ MyListView:
         RowText4 := SubStr(RowText1, 1, Length-2)
     }
 Return
-
 ; 辅助函数
 Check(filepath,oExcel)
 {
@@ -85,35 +81,33 @@ Check(filepath,oExcel)
 GuiClose(GuiHwnd) { ; 这个参数声明是可选的.
     MsgBox 4,, 确定退出吗?
     IfMsgBox No
-return true ; true = 1
+    return true ; true = 1
 }
-IfWinActive, ahk_exe notepad
+IfWinActive, ahk_exe notepad.exe
 {
 q::
     clipboard := RowText1
     send ^v
-Return
+    Return
 }
-IfWinActive, ahk_exe notepad
+IfWinActive, ahk_exe notepad.exe
 {
 w::
     clipboard := RowText2
     send ^v
-Return
+    Return
 }
-IfWinActive, ahk_exe notepad
+IfWinActive, ahk_exe notepad.exe
 {
 e::
     clipboard := RowText3
     send ^v
-Return
+    Return
 }
-
-IfWinActive, ahk_exe notepad
+IfWinActive, ahk_exe notepad.exe
 {
-
 r::
     clipboard := RowText4
     send ^v
-Return
+    Return
 }

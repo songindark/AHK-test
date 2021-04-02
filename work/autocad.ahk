@@ -10,11 +10,9 @@ PostMessage, 0x50, 0, 0x4090409, , A
 :*:sc::
 ControlSend,,scale,ahk_exe acad.exe
 return
-
 :*:bo::
 ControlSend,,boundary,ahk_exe acad.exe
 return
-
 :*:dr::
 ControlSend,,draworder,ahk_exe acad.exe
 return

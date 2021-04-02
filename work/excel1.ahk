@@ -7,7 +7,6 @@
 PostMessage, 0x50, 0, 0x4090409, , A 
 filepath:="C:\2.xls"
 xls:=Check(filepath,excel) ;检测是否打开了xlsx文件
-
 if (xls="") ;
 {
     InputBox,filepath,请打开相应Excel文件！,请输入xls路径,,300,200,,,,15,%filepath%
@@ -69,7 +68,6 @@ MyListView:
         clipboard := RowText
     }
 Return
-
 ; 辅助函数
 Check(filepath,oExcel)
 {
@@ -85,7 +83,6 @@ Check(filepath,oExcel)
     else
         return ""
 }
-
 GuiClose(GuiHwnd) { ; 这个参数声明是可选的.
     MsgBox 4,, 确定退出吗?
     IfMsgBox No
