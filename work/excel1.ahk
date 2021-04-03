@@ -1,15 +1,13 @@
-; #IfWinActive ahk_exe eps.exe
-;两行
+#IfWinActive ahk_exe eps.exe
 #SingleInstance force
-#NoEnv 
-; #Warn
+#NoEnv
 #Persistent
 PostMessage, 0x50, 0, 0x4090409, , A 
-filepath:="C:\2.xls"
-xls:=Check(filepath,excel) ;检测是否打开了xlsx文件
+filepath:="D:\2.xls"
+xls:=Check(filepath,excel) ;检测是否打开了xls文件
 if (xls="") ;
 {
-    InputBox,filepath,请打开相应Excel文件！,请输入xls路径,,300,200,,,,15,%filepath%
+    InputBox,filepath,请打开相应Excel文件,请输入路径并确定行数后关闭EXCEL,,300,200,,,,15,%filepath%
     if ErrorLevel
     {
         msgbox, 没有选择正确文件！
@@ -29,46 +27,40 @@ if (xls="") ;
     ; until IsObject(xls)
 }
 xls:=ComObjget(filepath)
-ToolTip
-TrayTip ,,已就绪
 R=0
 if (R="0") 
 {
-    InputBox,R,请输入总共行数
+    InputBox,R,请输入总共行数,字尾不能有空格或回车，BY宇佳
     if ErrorLevel
         ExitApp
     ; else
     ;     RunWait R
 }
-arr :=xls.sheets(1).Range["b1:c" r].value
+arr :=xls.sheets(1).Range["a1:c" r].value
 ;~ MsgBox % arr.MaxIndex(1) ; total rows
 ;~ MsgBox % arr.MaxIndex(2) ; total columns
 ; 创建图形界面
-Gui, Add, ListView,r33 w180 gMyListView,B|C
-GuiControl, -Redraw, MyListView
+Gui, Add, ListView,r40 w200 gMyListView,命令缩写|字符|备注
+GuiControl, -Redraw, gMyListView
 Loop, % arr.MaxIndex(1)
 {
     i:=A_Index
-    LV_Add("", arr[i,1],arr[i,2])
+    LV_Add("", arr[i,1],arr[i,2],arr[i,3])
+    L1:= arr[i,1]
+    R1:= arr[i,2]
+    L1:= ":*:" . L1
+    Hotstring(L1, R1)
 }
-LV_ModifyCol() ; 根据内容自动调整每列的大小.
-Gui, Show , Center AutoSize, list
+; LV_ModifyCol() ; 根据内容自动调整每列的大小.
+Gui, Show ;, Center AutoSize, list
 Gui,+AlwaysOnTop
-GuiControl, +Redraw, MyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
+GuiControl, +Redraw, gMyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
 MyListView:
     if A_GuiEvent = DoubleClick
     {
-        LV_GetText(RowText, A_EventInfo,2) ; 从行的第2个字段中获取文本.
-        ; ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
-        ;自己重定义了一个
-
-        RowText:= arr[A_EventInfo,2]
-        ; 内容
-        ; ControlSend,,%RowText%,ahk_exe eps.exe
-        clipboard := RowText
+        MsgBox, 启动完成
     }
 Return
-; 辅助函数
 Check(filepath,oExcel)
 {
     for Item in oExcel.workbooks
@@ -83,14 +75,11 @@ Check(filepath,oExcel)
     else
         return ""
 }
+Return
 GuiClose(GuiHwnd) { ; 这个参数声明是可选的.
     MsgBox 4,, 确定退出吗?
     IfMsgBox No
 return true ; true = 1
+Else
+ExitApp
 }
-
-IfWinActive, ahk_exe eps.exe
-{
-    q::^v
-}
-Return
