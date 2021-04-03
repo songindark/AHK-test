@@ -1,6 +1,6 @@
+#IfWinActive ahk_exe eps.exe
 #SingleInstance force
-#NoEnv 
-; #Warn
+#NoEnv
 #Persistent
 PostMessage, 0x50, 0, 0x4090409, , A 
 filepath:="D:\1.xls"
@@ -102,38 +102,26 @@ Check(filepath,oExcel)
     else
         return ""
 }
+q::
+    clipboard := RowText1
+    send ^v
+Return
+w::
+    clipboard := RowText2
+    send ^v
+Return
+e::
+    clipboard := RowText3
+    send ^v
+Return
+r::
+    clipboard := RowText4
+    send ^v
+Return
 GuiClose(GuiHwnd) { ; 这个参数声明是可选的.
     MsgBox 4,, 确定退出吗?
     IfMsgBox No
 return true ; true = 1
 Else
 ExitApp
-}
-IfWinActive, ahk_exe eps.exe
-{
-q::
-    clipboard := RowText1
-    send ^v
-Return
-}
-IfWinActive, ahk_exe eps.exe
-{
-w::
-    clipboard := RowText2
-    send ^v
-Return
-}
-IfWinActive, ahk_exe eps.exe
-{
-e::
-    clipboard := RowText3
-    send ^v
-Return
-}
-IfWinActive, ahk_exe eps.exe
-{
-r::
-    clipboard := RowText4
-    send ^v
-Return
 }
