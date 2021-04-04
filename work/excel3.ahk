@@ -10,7 +10,6 @@ if (xls="") ;
     InputBox,filepath,请打开相应Excel文件！,请输入路径并确定行数后关闭EXCEL,,300,200,,,,15,%filepath%
     if ErrorLevel
     {
-        msgbox, 没有选择正确文件！
         ExitApp
     }
     else
@@ -27,40 +26,40 @@ if (xls="") ;
     ; until IsObject(xls)
 }
 xls:=ComObjget(filepath)
-R=0
-L=6
-
-if (R="0") 
+TotalRow=1
+DeciNum=3
+if (TotalRow="1") 
 {
-    InputBox,R,请输入总共行数,尽量输大一些，BY宇佳
+    InputBox,TotalRow,请输入总共行数!,请输入非空行总行数，数值要准确，BY宇佳,,300,200,,,,15,%TotalRow%
     if ErrorLevel
         ExitApp
     ; else
-    ;     RunWait R
+    ;     RunWait TotalRow
 }
-if L=6
+if DeciNum=3
 {
-    InputBox,L,请输入小数位数,处理文字填9，处理数字的话填小数位数，不能超过六位且对第一列无效，BY宇佳
+    InputBox,DeciNum,请输入小数位数!,处理纯数字的话填小数位数，不能超过六位且对第一列无效，BY宇佳,,300,200,,,,15,%DeciNum%
     if ErrorLevel
         ExitApp
 }
-if L=0
+if DeciNum=0
 {
-    L:=7
+    DeciNum:=7
 }
-Else if L=9
+Else if DeciNum>6
 {
-    L:=0
+    msgbox, 暂时不支持六位以上小数!
+    ExitApp, [ ExitCode]
 }
 Else
 {
-    L:=6-L
+    DeciNum:=6-DeciNum
 }
-arr :=xls.sheets(1).Range["a1:c" r].value
+arr :=xls.sheets(1).Range["a1:c" TotalRow].value
 ;~ MsgBox % arr.MaxIndex(1) ; total rows
 ;~ MsgBox % arr.MaxIndex(2) ; total columns
 ; 创建图形界面
-Gui, Add, ListView,r50 w400 gMyListView,Q(R-2)|W|E
+Gui, Add, ListView,r50 w400 gMyListView,Q|W|E
 GuiControl, -Redraw, gMyListView
 Loop, % arr.MaxIndex(1)
 {
@@ -82,9 +81,11 @@ MyListView:
         Length := StrLen(RowText1)
         RowText4 := SubStr(RowText1, 1, Length-2)
         Length := StrLen(RowText3)
-        RowText3 := SubStr(RowText3, 1, Length-L)
+        if RowText3 is number 
+        RowText3 := SubStr(RowText3, 1, Length-DeciNum)
         Length := StrLen(RowText2)
-        RowText2 := SubStr(RowText2, 1, Length-L)
+        if RowText2 is number
+        RowText2 := SubStr(RowText2, 1, Length-DeciNum)
     }
 Return
 ; 辅助函数

@@ -7,10 +7,9 @@ filepath:="D:\2.xls"
 xls:=Check(filepath,excel) ;检测是否打开了xls文件
 if (xls="") ;
 {
-    InputBox,filepath,请打开相应Excel文件,请输入路径并确定行数后关闭EXCEL,,300,200,,,,15,%filepath%
+    InputBox,filepath,请打开相应Excel文件！,请输入路径并确定行数后关闭EXCEL,,300,200,,,,15,%filepath%
     if ErrorLevel
     {
-        msgbox, 没有选择正确文件！
         ExitApp
     }
     else
@@ -27,20 +26,35 @@ if (xls="") ;
     ; until IsObject(xls)
 }
 xls:=ComObjget(filepath)
-R=0
-if (R="0") 
+TotalRow=1
+DeciNum=3
+if (TotalRow="1") 
 {
-    InputBox,R,请输入总共行数,字尾不能有空格或回车，BY宇佳
+    InputBox,TotalRow,请输入总共行数!,请输入非空行总行数，数值要准确，BY宇佳,,300,200,,,,15,%TotalRow%
     if ErrorLevel
         ExitApp
-    ; else
-    ;     RunWait R
 }
-arr :=xls.sheets(1).Range["a1:c" r].value
-;~ MsgBox % arr.MaxIndex(1) ; total rows
-;~ MsgBox % arr.MaxIndex(2) ; total columns
-; 创建图形界面
-Gui, Add, ListView,r40 w200 gMyListView,命令缩写|字符|备注
+if DeciNum=3
+{
+    InputBox,DeciNum,请输入小数位数!,处理纯数字的话填小数位数，不能超过六位且对第一列无效，BY宇佳,,300,200,,,,15,%DeciNum%
+    if ErrorLevel
+        ExitApp
+}
+if DeciNum=0
+{
+    DeciNum:=7
+}
+Else if DeciNum>6
+{
+    msgbox, 暂时不支持六位以上小数!
+    ExitApp, [ ExitCode]
+}
+Else
+{
+    DeciNum:=6-DeciNum
+}
+arr :=xls.sheets(1).Range["a1:c" TotalRow].value
+Gui, Add, ListView,r10 w250 gMyListView,缩写|内容|注释
 GuiControl, -Redraw, gMyListView
 Loop, % arr.MaxIndex(1)
 {
@@ -49,16 +63,19 @@ Loop, % arr.MaxIndex(1)
     L1:= arr[i,1]
     R1:= arr[i,2]
     L1:= ":*:" . L1
+    Length := StrLen(R1)
+    if R1 is number 
+    R1 := SubStr(R1, 1, Length-DeciNum)
     Hotstring(L1, R1)
 }
-; LV_ModifyCol() ; 根据内容自动调整每列的大小.
+LV_ModifyCol() ; 根据内容自动调整每列的大小.
 Gui, Show ;, Center AutoSize, list
 Gui,+AlwaysOnTop
 GuiControl, +Redraw, gMyListView ; 重新启用重绘(上面把它禁用以节省系统资源).
 MyListView:
     if A_GuiEvent = DoubleClick
     {
-        MsgBox, 启动完成
+        MsgBox, 请在EXCEL中编辑
     }
 Return
 Check(filepath,oExcel)
