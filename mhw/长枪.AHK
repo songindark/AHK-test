@@ -37,9 +37,7 @@ Return
         {
             sleep,100
             If Not GetKeyState("g", "P")
-            {
                 break
-            }
         }
         sleep,100
         send,{y up}

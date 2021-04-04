@@ -1,4 +1,3 @@
-SetKeyDelay, 50
 #IfWinActive ahk_exe MonsterHunterWorld.exe
 #SingleInstance force
 #NoEnv 
@@ -7,19 +6,14 @@ SetKeyDelay, 50
 ~enter::Suspend
 ~f::j
 ~x::t
-~g::
-    sleep,100
-    send,{p down}
-    sleep,100
-    send,{p down}
-    loop
-    {
-        sleep,100
-        If Not GetKeyState("g", "P")
+~space::WheelUp
+g::
         {
-            break
+                SetTimer, Label_1, 50
         }
-    }
-    sleep,100
-    send,{p up}
-Return
+g up::
+        {
+                SetTimer, Label_1, Off
+        }
+Label_1:
+        SendInput, p
