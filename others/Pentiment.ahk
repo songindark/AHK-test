@@ -2,7 +2,10 @@
 #SingleInstance force
 #NoEnv
 //SendMode Input
-~LButton::
-        Sleep 100
-        Send, {RButton}
-
+LButton::
+    MouseGetPos, start_x, start_y
+    Sleep, 50
+    MouseMove, %start_x%, %start_y%
+    Sleep, 100
+    Click, Right
+    return
